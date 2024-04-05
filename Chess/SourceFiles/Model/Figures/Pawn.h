@@ -19,8 +19,8 @@ public:
 	void setNewState(const Position& newPosition) override;
 	void restorePreviousState(const Position& oldPosition) override;
 
-	Move findChessBoardUpdates(BaseFigure* const (&ChessBoard)[cagesCount][cagesCount], const Position& newPosition, bool ignoreSafeMoves = false) override;
-	std::vector<Position> findPossibleMovementsPositions(BaseFigure* const (&ChessBoard)[cagesCount][cagesCount], bool onlyAttackMovements = false) override;
+	Move findChessBoardUpdates(std::shared_ptr<BaseFigure> const (&ChessBoard)[cagesCount][cagesCount], const Position& newPosition, bool ignoreSafeMoves = false) override;
+	std::vector<Position> findPossibleMovementsPositions(std::shared_ptr<BaseFigure> const (&ChessBoard)[cagesCount][cagesCount], bool onlyAttackMovements = false) override;
 
 private:
 	struct State

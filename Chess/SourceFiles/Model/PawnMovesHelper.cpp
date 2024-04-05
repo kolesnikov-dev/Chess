@@ -3,7 +3,7 @@
 
 PawnMovesHelper::PawnMovesHelper() : replacedPawn(nullptr) {}
 
-void PawnMovesHelper::showChooseNewFigureWidget(Pawn* pawn, const Position newPosition)
+void PawnMovesHelper::setReplacedPawn(std::shared_ptr<BaseFigure> pawn, const Position newPosition)
 {
 	replacedPawn = pawn;
 	newFigurePosition = newPosition;

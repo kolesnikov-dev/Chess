@@ -21,6 +21,12 @@ ChessBoardController::~ChessBoardController()
 {
 	if (&chBModel)
 		delete& chBModel;
+	if (&selectFigure)
+		delete selectFigure;
+	if (&selectMovement)
+		delete selectMovement;
+	if (&endGame)
+		delete endGame;
 }
 
 void ChessBoardController::selectPosition(const QPoint& selectedPosition)

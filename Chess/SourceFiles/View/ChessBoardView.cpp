@@ -26,7 +26,7 @@ ChessBoardView::ChessBoardView(ChessBoardModel& ChBModel, ChessBoardController& 
 endgameDialog(nullptr), chooseFigureWidget(nullptr), messageLabel(nullptr),
 isReplaceMovementPressed(false), isCancelMovementPressed(false),
 isView(true), isMoveTips(true), isLastMoveTip(true),
-QFigureImagesPath(figureImagesPath.c_str()), QDeletePostion(deletePosition.Column, deletePosition.Row)
+QFigureImagesPath(figureImagesPath), QDeletePostion(deletePosition.Column, deletePosition.Row)
 {
 	if (ChBModel.getPlayer(Color::White)->getBaseLine() == 0)
 	{
@@ -167,7 +167,7 @@ void ChessBoardView::showEndgameWindow(const std::string message)
 	endgameDialog->show();
 }
 
-void ChessBoardView::showChooseNewFigureWidget()
+void ChessBoardView::setReplacedPawn()
 {
 	if (!isView) return;
 
@@ -323,8 +323,8 @@ void ChessBoardView::paintEvent(QPaintEvent* event)
 	{
 		for (auto j = 0; j < cagesCount; ++j)
 		{
-			BaseFigure* figure;
-			if ((figure = ChBModel.getChessBoard()[i][j])->getFigureType() != FigureType::NullFigure)
+			auto figure = ChBModel.getChessBoard()[i][j];
+			if (figure->getFigureType() != FigureType::NullFigure)
 			{
 				QPixmap pixmap = figuresPixmaps.value(figure->getKey());
 				painter.drawPixmap(chessboardTransform.map(QPointF(j, i)), pixmap);
@@ -405,8 +405,8 @@ void ChessBoardView::resizeEvent(QResizeEvent* event)
 	{
 		for (auto j = 0; j < cagesCount; ++j)
 		{
-			BaseFigure* figure;
-			if ((figure = ChBModel.getChessBoard()[i][j])->getFigureType() != FigureType::NullFigure)
+			auto figure = ChBModel.getChessBoard()[i][j];
+			if (figure->getFigureType() != FigureType::NullFigure)
 			{
 				int key = figure->getKey();
 				QPixmap pixmap(QFigureImagesPath + QString::number(key) + ".png");

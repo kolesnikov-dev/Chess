@@ -33,11 +33,14 @@ bool EventFilter::eventFilter(QObject* obj, QEvent* event)
             popupLayout->addWidget(noButton, 1, 1);
             quitDialog->setLayout(popupLayout);
         }
-        if (quitDialog->exec() == QDialog::Accepted)
-        {
+        auto returnValue = quitDialog->exec();
+        if (quitDialog)
             delete quitDialog;
+        if (returnValue == QDialog::Accepted)
+        {
             emit needToSave();
         }
+
     }
     return QObject::eventFilter(obj, event);
 }

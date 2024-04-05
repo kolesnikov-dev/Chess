@@ -44,7 +44,7 @@ enum Direction { Left = -1, Right = 1 };
 
 constexpr Position deletePosition{ -1, -1 };
 
-const std::string gameArchiveDirectory = "GamesArchive/";
-const std::string appDataFilename = gameArchiveDirectory + ".appdata";
-const std::string figureImagesPath = "FigureImages/";
-const std::string iconsFolderName = "Icons/";
+inline const char* gameArchiveDirectory = "GamesArchive/";
+inline const char* appDataFilename = "GamesArchive/.appdata";
+inline const char* figureImagesPath = "FigureImages/";
+inline const char* iconsFolderName = "Icons/";

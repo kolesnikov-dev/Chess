@@ -18,7 +18,7 @@ private:
 	bool isValidCastling(const BaseFigure* king, bool isNoMoves, const Direction delta);
 
 private:
-	virtual BaseFigure* (&getChessBoard())[cagesCount][cagesCount] = 0;
+	virtual std::shared_ptr<BaseFigure> (&getChessBoard())[cagesCount][cagesCount] = 0;
 	virtual Player* getPlayer(Color color) const = 0;
 	virtual bool isPositionAttacked(const Position& position, Color attackedPositionColor) = 0;
 };

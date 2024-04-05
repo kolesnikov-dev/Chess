@@ -20,7 +20,7 @@
 #include <QPushButton>
 
 MainWindow::MainWindow(const QString& firstPlayerName, const QString& secondPlayerName, const Color firstPlayerColor, const Color secondPlayerColor) :
-    QIconsFolderName(iconsFolderName.c_str())
+    QIconsFolderName(iconsFolderName)
 {
     chBController = new ChessBoardController(*new ChessBoardModel(firstPlayerColor, secondPlayerColor));
     chBView = chBController->getChessboardView();
@@ -62,6 +62,7 @@ MainWindow::MainWindow(const QString& firstPlayerName, const QString& secondPlay
 
     eventFilter = new EventFilter;
     connect(eventFilter, &EventFilter::needToSave, this, &MainWindow::save);
+    connect(qApp, &QApplication::aboutToQuit, [this]() { delete eventFilter; });
     qApp->installEventFilter(eventFilter);
 }
 
@@ -294,13 +295,13 @@ bool MainWindow::save()
 
 bool MainWindow::saveAs()
 {
-    auto fileName = QFileDialog::getSaveFileName(this, "Save chess game", gameArchiveDirectory.c_str(), "Chess game file (*.txt)");
+    auto fileName = QFileDialog::getSaveFileName(this, "Save chess game", gameArchiveDirectory, "Chess game file (*.txt)");
     return chBController->writeMoves(movesHistoryTable, fileName.toStdString());
 }
 
 bool MainWindow::open()
 {
-    auto fileName = QFileDialog::getOpenFileName(this, "Open chess game", gameArchiveDirectory.c_str(), "Chess game file (*.txt)");
+    auto fileName = QFileDialog::getOpenFileName(this, "Open chess game", gameArchiveDirectory, "Chess game file (*.txt)");
     if (fileName != QString())
     {
         clear();

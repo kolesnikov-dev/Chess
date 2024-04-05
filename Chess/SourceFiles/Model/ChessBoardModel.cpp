@@ -12,7 +12,7 @@ ChessBoardModel::ChessBoardModel(Color firstPlayerColor, Color secondPlayerColor
 	{
 		for (short j = 0; j < cagesCount; ++j)
 		{
-			ChessBoard[i][j] = new NullFigure({ i, j });
+			ChessBoard[i][j] = std::make_shared<NullFigure>(Position{ i, j });
 		}
 	}
 
@@ -28,17 +28,6 @@ ChessBoardModel::~ChessBoardModel()
 	for (const auto& player : players)
 	{
 		delete player;
-	}
-
-	for (auto i = 0; i < cagesCount; ++i)
-	{
-		for (auto j = 0; j < cagesCount; ++j)
-		{
-			if (ChessBoard[i][j]->getFigureType() != FigureType::NullFigure)
-			{
-				delete ChessBoard[i][j];
-			}
-		}
 	}
 }
 
@@ -96,25 +85,25 @@ bool ChessBoardModel::isMate(Player* player)
 	return false;
 }
 
-BaseFigure* ChessBoardModel::figuresFabric(FigureType figureType)
+std::shared_ptr<BaseFigure> ChessBoardModel::figuresFabric(FigureType figureType)
 {
-	BaseFigure* figure;
+	std::shared_ptr<BaseFigure> figure;
 	switch (figureType)
 	{
 	case FigureType::NullFigure:
-		figure = new NullFigure();
+		figure = std::make_shared<NullFigure>();
 		break;
 	case FigureType::Rook:
-		figure = new Rook();
+		figure = std::make_shared<Rook>();
 		break;
 	case FigureType::Knight:
-		figure = new Knight();
+		figure = std::make_shared<Knight>();
 		break;
 	case FigureType::Queen:
-		figure = new Queen();
+		figure = std::make_shared<Queen>();
 		break;
 	case FigureType::Bishop:
-		figure = new Bishop();
+		figure = std::make_shared<Bishop>();
 		break;
 	default:
 		return nullptr;
@@ -132,7 +121,7 @@ const std::vector<Move>& ChessBoardModel::getMovementHistory() const
 Move ChessBoardModel::changePawn(FigureType figureType)
 {
 	Move updates;
-	BaseFigure* newFigure = figuresFabric(figureType);
+	auto newFigure = figuresFabric(figureType);
 	newFigure->setColor(replacedPawn->getColor());
 	updates.addUpdate(deletePosition, replacedPawn);
 	updates.addUpdate(newFigurePosition, newFigure);
@@ -201,7 +190,7 @@ void ChessBoardModel::doChessBoarUpdates(std::vector<Update> updates, bool isUpd
 		}
 		else
 		{
-			ChessBoard[oldPosition.Row][oldPosition.Column] = new NullFigure(oldPosition);
+			ChessBoard[oldPosition.Row][oldPosition.Column] = std::make_shared<NullFigure>(oldPosition);
 			ChessBoard[newPosition.Row][newPosition.Column] = element.figure;
 		}
 	}
@@ -274,9 +263,9 @@ Move ChessBoardModel::moveSelectedFigure(const Position& position)
 
 void ChessBoardModel::setSelectedFigure(const Position& position)
 {
-	this->selectedFigure = new NullFigure;
+	this->selectedFigure = nullptr;
 	this->validMovements.clear();
-	BaseFigure* selectedFigure = ChessBoard[position.Row][position.Column];
+	auto selectedFigure = ChessBoard[position.Row][position.Column];
 	auto& currentPlayersFigures = currentPlayer->getPlayersFigures();
 	if (std::find(currentPlayersFigures.begin(), currentPlayersFigures.end(), selectedFigure) != currentPlayersFigures.end())
 	{
@@ -295,7 +284,7 @@ void ChessBoardModel::changePlayerToMove()
 
 bool ChessBoardModel::isSelectedFigure() const
 {
-	return selectedFigure->getFigureType() != FigureType::NullFigure;
+	return selectedFigure != nullptr;
 }
 
 bool ChessBoardModel::isLastPawnLongMove(const Position& position)
@@ -313,7 +302,7 @@ Player* ChessBoardModel::getCurrentPlayer() const
 	return currentPlayer;
 }
 
-BaseFigure* ChessBoardModel::getSelectedFigure() const
+std::shared_ptr<BaseFigure> ChessBoardModel::getSelectedFigure() const
 {
 	return selectedFigure;
 }
@@ -373,12 +362,12 @@ void ChessBoardModel::setChessboardState(Move& updateContainer)
 	}
 }
 
-bool ChessBoardModel::isSingleFieldFigures(BaseFigure* firstBishop, BaseFigure* secondBishop)
+bool ChessBoardModel::isSingleFieldFigures(const std::shared_ptr<BaseFigure>& firstBishop, const std::shared_ptr<BaseFigure>& secondBishop)
 {
 	return (firstBishop->getCurrentPosition().Row + firstBishop->getCurrentPosition().Column) % 2 == (secondBishop->getCurrentPosition().Row + secondBishop->getCurrentPosition().Column) % 2;
 }
 
-std::vector<Position> ChessBoardModel::findValidMovements(BaseFigure* selectedFigure)
+std::vector<Position> ChessBoardModel::findValidMovements(const std::shared_ptr<BaseFigure>& selectedFigure)
 {
 	std::vector<Position> validMovements;
 	auto selectedFigureMovements = selectedFigure->findPossibleMovementsPositions(ChessBoard);
@@ -418,7 +407,7 @@ Player* ChessBoardModel::getOpponentPlayer(Color color) const
 	return players[(color + 1) % playersCount];
 }
 
-BaseFigure* (&ChessBoardModel::getChessBoard())[cagesCount][cagesCount]
+std::shared_ptr<BaseFigure> (&ChessBoardModel::getChessBoard())[cagesCount][cagesCount]
 {
 	return ChessBoard;
 }

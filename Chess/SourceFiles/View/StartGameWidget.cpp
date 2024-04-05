@@ -26,8 +26,9 @@ StartGameWidget::StartGameWidget(QWidget* parent)
     secondPlayerName->setPlaceholderText("Enter 2nd player name");
     firstPlayerName->setAlignment(Qt::AlignCenter);
     secondPlayerName->setAlignment(Qt::AlignCenter);
-    firstPlayerName->setValidator(getNameValidator());
-    secondPlayerName->setValidator(getNameValidator());
+    auto nameValidator = getNameValidator();
+    firstPlayerName->setValidator(&nameValidator);
+    secondPlayerName->setValidator(&nameValidator);
 
     QPushButton* startGameButton = new QPushButton("Start game");
     QPushButton* backButton = new QPushButton("Back");
@@ -50,8 +51,8 @@ StartGameWidget::StartGameWidget(QWidget* parent)
     firstPlayerWhiteCheckbox->setChecked(true);
     secondPlayerBlackCheckbox->setChecked(true);
 
-    QButtonGroup* firstButtonGroup = new QButtonGroup();
-    QButtonGroup* secondButtonGroup = new QButtonGroup();
+    QButtonGroup* firstButtonGroup = new QButtonGroup(this);
+    QButtonGroup* secondButtonGroup = new QButtonGroup(this);
     firstButtonGroup->addButton(firstPlayerBlackCheckbox, Color::Black);
     firstButtonGroup->addButton(firstPlayerWhiteCheckbox, Color::White);
     secondButtonGroup->addButton(secondPlayerBlackCheckbox, Color::Black);
@@ -71,8 +72,8 @@ StartGameWidget::StartGameWidget(QWidget* parent)
     connect(backButton, &QPushButton::clicked, qobject_cast<MenuWidget*>(parent), &MenuWidget::show);
     connect(backButton, &QPushButton::clicked, this, &StartGameWidget::hide);
 
-    QPixmap whitePixmap(QString(figureImagesPath.c_str()) + "white.jpg");
-    QPixmap blackPixmap(QString(figureImagesPath.c_str()) + "black.jpg");
+    QPixmap whitePixmap(QString(figureImagesPath) + "white.jpg");
+    QPixmap blackPixmap(QString(figureImagesPath) + "black.jpg");
     whitePixmap = whitePixmap.scaled(40, 40);
     blackPixmap = blackPixmap.scaled(40, 40);
     QLabel* firstPlayerWhiteLabel = new QLabel();
@@ -121,7 +122,7 @@ void StartGameWidget::connectButtons(QCheckBox* clickedButton, QCheckBox* connec
         });
 }
 
-QRegularExpressionValidator* StartGameWidget::getNameValidator() const
+QRegularExpressionValidator StartGameWidget::getNameValidator() const
 {
     QRegularExpression regex;
     QString regexString("\\S{");
@@ -129,5 +130,5 @@ QRegularExpressionValidator* StartGameWidget::getNameValidator() const
     regexString += ',';
     regexString += QString::number(nameMaxLength);
     regexString += '}';
-    return new QRegularExpressionValidator(QRegularExpression(regexString));
+    return QRegularExpressionValidator(QRegularExpression(regexString));
 }

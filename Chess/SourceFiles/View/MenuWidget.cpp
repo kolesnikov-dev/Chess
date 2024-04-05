@@ -84,7 +84,7 @@ void MenuWidget::createMainWindow(MainWindow* mainWindow)
 
 void MenuWidget::showOpenFileDialog()
 {
-    auto fileName = QFileDialog::getOpenFileName(this, "Open chess game", gameArchiveDirectory.c_str(), "Chess game file (*.txt)");
+    auto fileName = QFileDialog::getOpenFileName(this, "Open chess game", gameArchiveDirectory, "Chess game file (*.txt)");
     if (fileName != QString())
     {
         if (mainWindow)

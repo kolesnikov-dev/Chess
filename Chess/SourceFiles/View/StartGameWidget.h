@@ -19,7 +19,7 @@ signals:
 
 private:
     void connectButtons(QCheckBox* clickedButton, QCheckBox* connectedButton) const;
-    QRegularExpressionValidator* getNameValidator() const;
+    QRegularExpressionValidator getNameValidator() const;
 
 private:
     const int nameMaxLength = 10, nameMinLength = 3;

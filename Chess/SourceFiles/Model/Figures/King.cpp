@@ -38,7 +38,7 @@ FigureType King::getFigureType() const
 	return FigureType::King;
 }
 
-Move King::findChessBoardUpdates(BaseFigure* const (&ChessBoard)[cagesCount][cagesCount], const Position& newPosition, bool ignoreSafeMoves)
+Move King::findChessBoardUpdates(std::shared_ptr<BaseFigure> const (&ChessBoard)[cagesCount][cagesCount], const Position& newPosition, bool ignoreSafeMoves)
 {
 	auto updates = BaseFigure::findChessBoardUpdates(ChessBoard, newPosition);
 	if (!ignoreSafeMoves)
@@ -61,7 +61,7 @@ Move King::findChessBoardUpdates(BaseFigure* const (&ChessBoard)[cagesCount][cag
 	return updates;
 }
 
-std::vector<Position> King::findPossibleMovementsPositions(BaseFigure* const (&ChessBoard)[cagesCount][cagesCount], bool onlyAttackMovements)
+std::vector<Position> King::findPossibleMovementsPositions(std::shared_ptr<BaseFigure> const (&ChessBoard)[cagesCount][cagesCount], bool onlyAttackMovements)
 {
 	auto movementPositions = BaseFigure::findPossibleMovementsPositions(ChessBoard);
 	if (!onlyAttackMovements)

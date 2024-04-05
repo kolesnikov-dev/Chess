@@ -46,7 +46,7 @@ public:
 	void notateLastMove(const Move& moveUpdates);
 	void printStatusBarMessage(const std::string message);
 
-	void showChooseNewFigureWidget();
+	void setReplacedPawn();
 	void showEndgameWindow(const std::string message);
 
 	void redrawFigure(const Move& updates, bool cancelMove = false);

@@ -7,11 +7,6 @@
 #include <QStyleFactory>
 #include <QFontDatabase>
 
-#define __CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
-#define new DEBUG_NEW
-
 void setStyle();
 void setPalette();
 void setFont();
@@ -24,14 +19,12 @@ int main(int argc, char* argv[])
     setPalette();
     setFont();
 
-    app.setWindowIcon(QIcon((iconsFolderName + "app-icon_.png").c_str()));
+    app.setWindowIcon(QIcon((iconsFolderName + QString("app-icon_.png"))));
     app.setApplicationName("Chess");
     app.setApplicationVersion("1.0");
 
     MenuWidget menu;
     menu.showMaximized();
-
-    _CrtDumpMemoryLeaks();
 
     return app.exec();
 }

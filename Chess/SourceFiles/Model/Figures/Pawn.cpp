@@ -37,14 +37,14 @@ void Pawn::setNewState(const Position& newPosition)
 	BaseFigure::setNewState(newPosition);
 }
 
-Move Pawn::findChessBoardUpdates(BaseFigure* const (&ChessBoard)[cagesCount][cagesCount], const Position& newPosition, bool ignoreSafeMoves)
+Move Pawn::findChessBoardUpdates(std::shared_ptr<BaseFigure> const (&ChessBoard)[cagesCount][cagesCount], const Position& newPosition, bool ignoreSafeMoves)
 {
 	auto updates = BaseFigure::findChessBoardUpdates(ChessBoard, newPosition);
 	auto delta = pawnMovesHelper->getENPassantDelta(currentPosition);
 
 	if (!ignoreSafeMoves && newPosition.Row == cagesCount - 1 - firstHorizontalLine)
 	{
-		pawnMovesHelper->showChooseNewFigureWidget(this, newPosition);
+		pawnMovesHelper->setReplacedPawn(ChessBoard[currentPosition.Row][currentPosition.Column], newPosition);
 		updates.setMoveType(MoveType::Promotion, false);
 	}
 	else if (delta != 0 && currentPosition.Column + delta == newPosition.Column && abs(currentPosition.Row - newPosition.Row) == 1)
@@ -55,7 +55,7 @@ Move Pawn::findChessBoardUpdates(BaseFigure* const (&ChessBoard)[cagesCount][cag
 	return updates;
 }
 
-std::vector<Position> Pawn::findPossibleMovementsPositions(BaseFigure* const (&ChessBoard)[cagesCount][cagesCount], bool onlyAttackMovements)
+std::vector<Position> Pawn::findPossibleMovementsPositions(std::shared_ptr<BaseFigure> const (&ChessBoard)[cagesCount][cagesCount], bool onlyAttackMovements)
 {
 	short delta = 0;
 	auto movementPositions = BaseFigure::findPossibleMovementsPositions(ChessBoard);

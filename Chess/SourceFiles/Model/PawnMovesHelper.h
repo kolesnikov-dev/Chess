@@ -10,7 +10,7 @@ public:
 	PawnMovesHelper();
 
 public:
-	void showChooseNewFigureWidget(Pawn* pawn, const Position newPosition);
+	void setReplacedPawn(std::shared_ptr<BaseFigure> pawn, const Position newPosition);
 	bool isNeedToChangePawn();
 	const short getENPassantDelta(const Position& currentPosition);
 
@@ -18,12 +18,12 @@ private:
 	bool isENPassant(const Position& currentPosition, short delta);
 
 private:
-	virtual BaseFigure* (&getChessBoard())[cagesCount][cagesCount] = 0;
+	virtual std::shared_ptr<BaseFigure> (&getChessBoard())[cagesCount][cagesCount] = 0;
 	virtual bool isLastPawnLongMove(const Position& position) = 0;
 	virtual Move changePawn(FigureType figureType) = 0;
 
 protected:
-	Pawn* replacedPawn;
+	std::shared_ptr<BaseFigure> replacedPawn;
 	Position newFigurePosition;
 };
 

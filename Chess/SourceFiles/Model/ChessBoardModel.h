@@ -24,7 +24,7 @@ public:
 	bool isPlayerCheck(const Player* player);
 	void setSelectedFigure(const Position& Position);
 	void doChessBoarUpdates(std::vector<Update> updates, bool isUpdatesReverse = false);
-	std::vector<Position> findValidMovements(BaseFigure* selectedFigure);
+	std::vector<Position> findValidMovements(const std::shared_ptr<BaseFigure>& selectedFigure);
 	Move moveSelectedFigure(const Position& newPosition);
 	void changePlayerToMove();
 
@@ -35,7 +35,7 @@ public:
 	boardStateMask getChessboardState() const;
 	const std::vector<Move>& getMovementHistory() const;
 	Move getCurrentMovement() const;
-	BaseFigure* getSelectedFigure() const;
+	std::shared_ptr<BaseFigure> getSelectedFigure() const;
 	const std::vector<Position>& getSelectedFigureValidMovements() const;
 
 	bool isSelectedFigure() const;
@@ -46,19 +46,19 @@ public:
 	bool isPositionAttacked(const Position& position, Color attackedPositionColor) override;
 	bool isLastPawnLongMove(const Position& position) override;
 
-	BaseFigure* (&getChessBoard())[cagesCount][cagesCount] override;
+	std::shared_ptr<BaseFigure> (&getChessBoard())[cagesCount][cagesCount] override;
 	Player* getPlayer(Color color) const override;
 
 	Move changePawn(FigureType figureType) override;
 
 private:
-	bool isSingleFieldFigures(BaseFigure* firstBishop, BaseFigure* secondBishop);
+	bool isSingleFieldFigures(const std::shared_ptr<BaseFigure>& firstBishop, const std::shared_ptr<BaseFigure>& secondBishop);
 	void setChessboardState(Move& updateContainer);
-	BaseFigure* figuresFabric(FigureType figureType);
+	std::shared_ptr<BaseFigure> figuresFabric(FigureType figureType);
 
 private:
-	BaseFigure* ChessBoard[cagesCount][cagesCount];
-	BaseFigure* selectedFigure;
+	std::shared_ptr<BaseFigure> ChessBoard[cagesCount][cagesCount];
+	std::shared_ptr<BaseFigure> selectedFigure;
 
 	int movementsHistorySize;
 	std::vector<Move> movementsHistory;

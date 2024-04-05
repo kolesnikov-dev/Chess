@@ -4,20 +4,18 @@
 #include "Figures/King.h"
 #include "Figures/Rook.h"
 
-//class King;
-//class Rook;
-
 class Player
 {
 public:
-	Player(BaseFigure* (&ChessBoard)[cagesCount][cagesCount], const Color color);
+	Player(std::shared_ptr<BaseFigure> (&ChessBoard)[cagesCount][cagesCount], const Color color);
 
 public:
 	void addFigure(BaseFigure* figure);
-	void removeFigure(BaseFigure* figure, Position oldPosition);
+	void addFigure(const std::shared_ptr<BaseFigure>& figurePtr);
+	void removeFigure(const std::shared_ptr<BaseFigure>& figure, Position oldPosition);
 
 	const Position& getKingCurrentPosition() const;
-	const std::vector<BaseFigure*>& getPlayersFigures() const;
+	const std::vector<std::shared_ptr<BaseFigure>>& getPlayersFigures() const;
 	Color getColor() const;
 
 public:
@@ -28,15 +26,15 @@ public:
 
 protected:
 	King* king;
-	std::vector<BaseFigure*> playersFigures;
-	BaseFigure* (&ChessBoard)[cagesCount][cagesCount];
+	std::vector<std::shared_ptr<BaseFigure>> playersFigures;
+	std::shared_ptr<BaseFigure>(&ChessBoard)[cagesCount][cagesCount];
 	const Color color;
 };
 
 class ClassicPlayer : public Player
 {
 public:
-	ClassicPlayer(BaseFigure* (&ChessBoard)[cagesCount][cagesCount], const Color color, const short firstHorizontalLine, CastlingHelper* castlingHelper, PawnMovesHelper* pawnMovesHelper);
+	ClassicPlayer(std::shared_ptr<BaseFigure> (&ChessBoard)[cagesCount][cagesCount], const Color color, const short firstHorizontalLine, CastlingHelper* castlingHelper, PawnMovesHelper* pawnMovesHelper);
 
 public:
 	void initializeFigures() override;

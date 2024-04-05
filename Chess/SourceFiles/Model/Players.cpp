@@ -1,23 +1,33 @@
 #include "Players.h"
 
-Player::Player(BaseFigure* (&ChessBoard)[cagesCount][cagesCount], const Color color)
+Player::Player(std::shared_ptr<BaseFigure> (&ChessBoard)[cagesCount][cagesCount], const Color color)
 		: ChessBoard(ChessBoard), color(color), king(nullptr) {}
 
 void Player::addFigure(BaseFigure* figure)
 {
-	ChessBoard[figure->getCurrentPosition().Row][figure->getCurrentPosition().Column] = figure;
+	std::shared_ptr<BaseFigure> figurePtr(figure);
+	ChessBoard[figure->getCurrentPosition().Row][figure->getCurrentPosition().Column] = figurePtr;
 	if (figure->getFigureType() != FigureType::NullFigure)
 	{
-		playersFigures.push_back(figure);
+		playersFigures.push_back(figurePtr);
 	}
 }
 
-void Player::removeFigure(BaseFigure* figure, Position oldPosition)
+void Player::addFigure(const std::shared_ptr<BaseFigure>& figurePtr)
+{
+	ChessBoard[figurePtr->getCurrentPosition().Row][figurePtr->getCurrentPosition().Column] = figurePtr;
+	if (figurePtr->getFigureType() != FigureType::NullFigure)
+	{
+		playersFigures.push_back(figurePtr);
+	}
+}
+
+void Player::removeFigure(const std::shared_ptr<BaseFigure>& figure, Position oldPosition)
 {
 	if (figure->getFigureType() != FigureType::NullFigure)
 	{
 		playersFigures.erase(std::find(playersFigures.begin(), playersFigures.end(), figure));
-		ChessBoard[oldPosition.Row][oldPosition.Column] = new NullFigure(figure->getCurrentPosition());
+		ChessBoard[oldPosition.Row][oldPosition.Column] = std::make_shared<NullFigure>(figure->getCurrentPosition());
 	}
 }
 
@@ -26,7 +36,7 @@ const Position& Player::getKingCurrentPosition() const
 	return king->getCurrentPosition();
 }
 
-const std::vector<BaseFigure*>& Player::getPlayersFigures() const
+const std::vector<std::shared_ptr<BaseFigure>>& Player::getPlayersFigures() const
 {
 	return playersFigures;
 }
@@ -36,7 +46,7 @@ Color Player::getColor() const
 	return color;
 }
 
-ClassicPlayer::ClassicPlayer(BaseFigure* (&ChessBoard)[cagesCount][cagesCount], const Color color, const short firstHorizontalLine, CastlingHelper* castlingHelper, PawnMovesHelper* pawnMovesHelper) : 
+ClassicPlayer::ClassicPlayer(std::shared_ptr<BaseFigure> (&ChessBoard)[cagesCount][cagesCount], const Color color, const short firstHorizontalLine, CastlingHelper* castlingHelper, PawnMovesHelper* pawnMovesHelper) :
 	Player(ChessBoard, color), 
 	castlingHelper(castlingHelper), pawnMovesHelper(pawnMovesHelper), firstHorizontalLine(firstHorizontalLine),
     longCastlingRook(nullptr), shortCaslingRook(nullptr) {}

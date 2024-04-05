@@ -22,7 +22,7 @@ void SelectMovement::selectPosition(const QPoint& movementPosition)
 		if (chBModel.isNeedToChangePawn())
 		{
 			chBController.printStatusBarMessage("It is need to choose a figure");
-			chBView.showChooseNewFigureWidget();
+			chBView.setReplacedPawn();
 			chBController.setState(chBController.getSelectFigureState());
 			return;
 		}

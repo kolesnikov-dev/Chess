@@ -3,19 +3,20 @@
 #include "../../Constants.h"
 
 #include <vector>
+#include <memory>
 
 class BaseFigure;
 
 struct Update
 {
 	Position position;
-	BaseFigure* figure = nullptr;
+	std::shared_ptr<BaseFigure> figure;
 };
 
 class Move
 {
 public:
-	void addUpdate(const Position& position, BaseFigure* figure);
+	void addUpdate(const Position& position, const std::shared_ptr<BaseFigure>& figure);
 	const std::vector<Update> getUpdates() const;
 	const std::vector<Update> getCancelingUpdates() const;
 
@@ -53,8 +54,8 @@ public:
 	virtual void setNewState(const Position& newPosition);
 	virtual void restorePreviousState(const Position& oldPosition);
 
-	virtual std::vector<Position> findPossibleMovementsPositions(BaseFigure* const (&ChessBoard)[cagesCount][cagesCount], bool onlyAttackMovements = false);
-	virtual Move findChessBoardUpdates(BaseFigure* const (&ChessBoard)[cagesCount][cagesCount], const Position& newPosition, bool ignoreSafeMoves = false);
+	virtual std::vector<Position> findPossibleMovementsPositions(std::shared_ptr<BaseFigure> const (&ChessBoard)[cagesCount][cagesCount], bool onlyAttackMovements = false);
+	virtual Move findChessBoardUpdates(std::shared_ptr<BaseFigure> const (&ChessBoard)[cagesCount][cagesCount], const Position& newPosition, bool ignoreSafeMoves = false);
 
 public:
 	const Position& getCurrentPosition() const;

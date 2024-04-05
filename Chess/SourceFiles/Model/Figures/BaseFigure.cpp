@@ -24,7 +24,7 @@ boardStateMask Move::getChessboardState() const
 	return state;
 }
 
-void Move::addUpdate(const Position& position, BaseFigure* figure)
+void Move::addUpdate(const Position& position, const std::shared_ptr<BaseFigure>& figure)
 {
 	updates.push_back({ position, figure });
 	cancelingUpdates.insert(cancelingUpdates.begin(), { figure->getCurrentPosition(), figure });
@@ -95,7 +95,7 @@ void BaseFigure::restorePreviousState(const Position& oldPosition)
 	currentPosition = oldPosition;
 }
 
-Move BaseFigure::findChessBoardUpdates(BaseFigure* const (&ChessBoard)[cagesCount][cagesCount], const Position& newPosition, bool ignoreSafeMoves)
+Move BaseFigure::findChessBoardUpdates(std::shared_ptr<BaseFigure> const (&ChessBoard)[cagesCount][cagesCount], const Position& newPosition, bool ignoreSafeMoves)
 {
 	Move updates;
 	if (ChessBoard[newPosition.Row][newPosition.Column]->getFigureType() != FigureType::NullFigure)
@@ -107,11 +107,11 @@ Move BaseFigure::findChessBoardUpdates(BaseFigure* const (&ChessBoard)[cagesCoun
 	{
 		updates.setMoveType(MoveType::SimpleMove);
 	}
-	updates.addUpdate(newPosition, this);
+	updates.addUpdate(newPosition, ChessBoard[currentPosition.Row][currentPosition.Column]);
 	return updates;
 }
 
-std::vector<Position> BaseFigure::findPossibleMovementsPositions(BaseFigure* const (&ChessBoard)[cagesCount][cagesCount], bool onlyAttackMovements)
+std::vector<Position> BaseFigure::findPossibleMovementsPositions(std::shared_ptr<BaseFigure> const (&ChessBoard)[cagesCount][cagesCount], bool onlyAttackMovements)
 {
 	std::vector<Position> movementsPositions;
 	for (auto idx = 0; idx < movementParameters.size(); ++idx)
