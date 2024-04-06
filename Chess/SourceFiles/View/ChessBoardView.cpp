@@ -421,7 +421,7 @@ void ChessBoardView::resizeEvent(QResizeEvent* event)
 void ChessBoardView::mousePressEvent(QMouseEvent* event)
 {
 	QPointF coords = invertedTransform.map(static_cast<QPointF>(event->pos()));
-	if (coords.x() < cagesCount && coords.y() < cagesCount)
+	if (coords.x() < cagesCount && coords.x() >= 0 && coords.y() < cagesCount && coords.y() >= 0)
 	{
 		lastChoosedPosition = QPoint(std::floor(coords.x()), std::floor(coords.y()));
 		ChBController.selectPosition(lastChoosedPosition.toPoint());

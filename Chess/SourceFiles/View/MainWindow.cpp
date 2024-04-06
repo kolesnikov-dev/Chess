@@ -266,8 +266,6 @@ void MainWindow::addTextToTable(int row, int column, const QString& text, const 
 
 void MainWindow::changeMovesHistoryEditSize()
 {
-    static int offsetX = 4;
-
     movesHistoryEdit->document()->adjustSize();
     if (offsetX == 4 && movesHistoryEdit->size().height() < movesHistoryEdit->document()->size().height())
     {

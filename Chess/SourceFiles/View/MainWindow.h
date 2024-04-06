@@ -69,6 +69,7 @@ private:
     QAction* exitAct;
 
 private:
+    int offsetX = 4;
     const QString QIconsFolderName;
     ChessBoardController* chBController;
     ChessBoardView* chBView;
